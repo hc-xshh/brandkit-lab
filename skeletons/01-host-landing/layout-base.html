@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hosting landing skeleton — brandkit</title>
+<meta name="description" content="A neutral landing-page skeleton. Layout is fixed; only tokens and copy change.">
+<style>
+  /* The frozen facts live between the two markers below. assemble_kit() is the
+     only writer of that block; apply.py is the only thing allowed to bind it
+     into a page. Nothing outside the markers may be restyled by a kit. */
+  /* === brandkit:tokens:start === */
+  :root {
+    --paper: #ffffff;
+    --paper-alt: #f5f7fa;
+    --ink: #101418;
+    --ink-muted: #5b6673;
+    --primary: #2f5df6;
+    --primary-ink: #ffffff;
+    --border: #e2e6ec;
+    --accent: #00a27a;
+    --heading-font: 'system-ui';
+    --body-font: 'system-ui';
+    --radius-cta: 8px;
+    --radius-card: 14px;
+    --radius-pill: 9999px;
+    --shadow-card: 0 1px 2px rgba(16, 20, 24, 0.06), 0 8px 24px rgba(16, 20, 24, 0.07);
+    --shadow-raised: 0 2px 4px rgba(16, 20, 24, 0.08), 0 18px 44px rgba(16, 20, 24, 0.12);
+  }
+  /* === brandkit:tokens:end === */
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { font-size: 17px; line-height: 1.6; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--body-font), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 {
+    font-family: var(--heading-font), Georgia, "Times New Roman", serif;
+    color: var(--ink);
+    margin: 0 0 0.5em;
+    line-height: 1.12;
+    letter-spacing: -0.012em;
+  }
+  h1 { font-size: 3rem; }
+  h2 { font-size: 2rem; }
+  h3 { font-size: 1.15rem; }
+  p { margin: 0 0 1rem; }
+  a { color: var(--primary); text-underline-offset: 3px; }
+  .wrap { width: 100%; max-width: 1080px; margin: 0 auto; padding: 0 32px; }
+  .band { padding: 72px 0; border-top: 1px solid var(--border); }
+  .band:first-of-type { border-top: 0; }
+  .skip { position: absolute; left: -9999px; }
+
+  /* nav-bar */
+  .nav { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 20px 32px; }
+  .brand { font-family: var(--heading-font), Georgia, serif; font-size: 1.15rem; font-weight: 600; }
+  .nav__links { display: flex; align-items: center; gap: 22px; font-size: 0.94rem; }
+  .nav__links a { color: var(--ink); text-decoration: none; }
+
+  /* shared atoms */
+  .eyebrow {
+    font-size: 0.76rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-muted); margin: 0 0 0.75rem; font-weight: 600;
+  }
+  .lead { font-size: 1.16rem; color: var(--ink-muted); }
+  .meta { font-size: 0.84rem; color: var(--ink-muted); margin: 0; }
+  .btn {
+    display: inline-block; background: var(--primary); color: var(--primary-ink);
+    border-radius: var(--radius-cta); padding: 13px 22px; text-decoration: none;
+    font-weight: 600; font-size: 0.95rem;
+  }
+  .btn--ghost { background: transparent; color: var(--ink); border: 1px solid var(--border); }
+  .card {
+    background: var(--paper-alt); border: 1px solid var(--border);
+    border-radius: var(--radius-card); padding: 24px; box-shadow: var(--shadow-card);
+  }
+  .card:hover { box-shadow: var(--shadow-raised); }
+
+  /* hero-center */
+  .hero { text-align: center; }
+  .hero p.lead { max-width: 620px; margin: 0 auto 1.5rem; }
+  .hero__actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 1rem; }
+
+  /* logo-strip */
+  .proof { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin: 0 0 0.75rem; padding: 0; list-style: none; }
+  .proof li {
+    border: 1px solid var(--border); border-radius: var(--radius-pill);
+    padding: 7px 16px; font-size: 0.85rem; color: var(--ink-muted); background: var(--paper-alt);
+  }
+
+  /* feature-grid-3 */
+  .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-top: 8px; }
+  .grid .card h3 { margin-bottom: 0.4rem; }
+
+  /* stat-band */
+  .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; text-align: center; }
+  .stat__value {
+    font-family: var(--heading-font), Georgia, serif; font-size: 2.6rem;
+    color: var(--primary); margin: 0; line-height: 1.1;
+  }
+  .stat__label { font-size: 0.9rem; color: var(--ink-muted); margin: 0; }
+
+  /* cta-banner */
+  .close { background: var(--paper-alt); border-top: 1px solid var(--border); text-align: center; }
+
+  /* footer-legal */
+  .footer { display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-between; align-items: flex-start; }
+  .footer__links { display: flex; gap: 18px; flex-wrap: wrap; margin: 0; padding: 0; list-style: none; }
+  .footer__links a { color: var(--ink-muted); text-decoration: none; font-size: 0.85rem; }
+
+  @media (max-width: 760px) {
+    .grid, .stats { grid-template-columns: 1fr; }
+    .footer { flex-direction: column; }
+    .nav { flex-wrap: wrap; }
+    h1 { font-size: 2.2rem; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#hero">Skip to content</a>
+
+<header class="band" data-band="nav" data-block="nav-bar" style="padding:0">
+  <div class="nav">
+    <span class="brand" data-slot="nav-bar.brand">Fieldnote</span>
+    <nav class="nav__links" data-repeat="nav-bar.nav-item" aria-label="Main">
+      <a href="#" data-slot="nav-bar.nav-item[0]">Product</a>
+      <a href="#" data-slot="nav-bar.nav-item[1]">Pricing</a>
+      <a href="#" data-slot="nav-bar.nav-item[2]">Docs</a>
+      <a href="#" data-slot="nav-bar.nav-item[3]">Support</a>
+    </nav>
+    <a class="btn" href="#" data-slot="nav-bar.cta">Start free</a>
+  </div>
+</header>
+
+<section class="band hero" id="hero" data-band="hero" data-block="hero-center">
+  <div class="wrap">
+    <p class="eyebrow" data-slot="hero-center.eyebrow">Static hosting, quietly done</p>
+    <h1 data-slot="hero-center.h1">Ship a site without babysitting a server</h1>
+    <p class="lead" data-slot="hero-center.lead">Push a repository and get a global edge, automatic TLS and preview URLs on every branch. No YAML required, but it is there if you want it.</p>
+    <div class="hero__actions">
+      <a class="btn" href="#" data-slot="hero-center.cta">Deploy a project</a>
+      <a class="btn btn--ghost" href="#" data-slot="hero-center.cta-secondary">Read the docs</a>
+    </div>
+    <p class="meta" data-slot="hero-center.meta">Free for personal projects. No card, no trial timer.</p>
+  </div>
+</section>
+
+<section class="band" data-band="proof" data-block="logo-strip">
+  <div class="wrap">
+    <p class="eyebrow" data-slot="logo-strip.eyebrow">Trusted by teams who ship on Fridays</p>
+    <ul class="proof" data-repeat="logo-strip.nav-item">
+      <li data-slot="logo-strip.nav-item[0]">Kestrel Labs</li>
+      <li data-slot="logo-strip.nav-item[1]">Ottoline</li>
+      <li data-slot="logo-strip.nav-item[2]">Fathom &amp; Co</li>
+      <li data-slot="logo-strip.nav-item[3]">Brightmoor</li>
+      <li data-slot="logo-strip.nav-item[4]">Northgate Press</li>
+    </ul>
+    <p class="meta" data-slot="logo-strip.meta">Names shown with permission of nobody: this is a skeleton.</p>
+  </div>
+</section>
+
+<section class="band" data-band="features" data-block="feature-grid-3">
+  <div class="wrap">
+    <p class="eyebrow" data-slot="feature-grid-3.eyebrow">What you get</p>
+    <h2 data-slot="feature-grid-3.h2">Three things, done properly</h2>
+    <div class="grid" data-repeat="feature-grid-3.feature">
+      <article class="card">
+        <h3 data-slot="feature-grid-3.item-title[0]">Instant previews</h3>
+        <p data-slot="feature-grid-3.item-body[0]">Every branch gets a URL you can send to a client before anyone reviews a merge request.</p>
+      </article>
+      <article class="card">
+        <h3 data-slot="feature-grid-3.item-title[1]">Certificates that renew</h3>
+        <p data-slot="feature-grid-3.item-body[1]">TLS is provisioned on the first request and renewed without a maintenance window.</p>
+      </article>
+      <article class="card">
+        <h3 data-slot="feature-grid-3.item-title[2]">Logs you can read</h3>
+        <p data-slot="feature-grid-3.item-body[2]">Request logs are plain text, kept for thirty days, and exportable as CSV.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="band" data-band="numbers" data-block="stat-band">
+  <div class="wrap">
+    <h2 data-slot="stat-band.h2">Running the numbers</h2>
+    <div class="stats" data-repeat="stat-band.stat">
+      <div>
+        <p class="stat__value" data-slot="stat-band.item-value[0]">41 ms</p>
+        <p class="stat__label" data-slot="stat-band.item-label[0]">Median edge response</p>
+      </div>
+      <div>
+        <p class="stat__value" data-slot="stat-band.item-value[1]">99.98%</p>
+        <p class="stat__label" data-slot="stat-band.item-label[1]">Rolling 90-day uptime</p>
+      </div>
+      <div>
+        <p class="stat__value" data-slot="stat-band.item-value[2]">120k</p>
+        <p class="stat__label" data-slot="stat-band.item-label[2]">Projects deployed</p>
+      </div>
+    </div>
+    <p class="meta" data-slot="stat-band.meta">Measured from outside our own network, twelve regions.</p>
+  </div>
+</section>
+
+<section class="band close" data-band="close" data-block="cta-banner">
+  <div class="wrap">
+    <h2 data-slot="cta-banner.h2">Point a repository at it and see</h2>
+    <p class="lead" data-slot="cta-banner.lead">Most projects are live in under four minutes.</p>
+    <a class="btn" href="#" data-slot="cta-banner.cta">Create your first project</a>
+    <p class="meta" data-slot="cta-banner.meta">Cancel by deleting the project. That is genuinely the whole process.</p>
+  </div>
+</section>
+
+<footer class="band" data-band="footer" data-block="footer-legal">
+  <div class="wrap footer">
+    <p data-slot="footer-legal.footer">Fieldnote Hosting — a neutral skeleton authored for brandkit-lab.</p>
+    <div>
+      <ul class="footer__links" data-repeat="footer-legal.nav-item">
+        <li><a href="#" data-slot="footer-legal.nav-item[0]">Status</a></li>
+        <li><a href="#" data-slot="footer-legal.nav-item[1]">Privacy</a></li>
+        <li><a href="#" data-slot="footer-legal.nav-item[2]">Terms</a></li>
+      </ul>
+      <p class="meta" data-slot="footer-legal.meta">No cookies, no analytics, no external fonts on this page.</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

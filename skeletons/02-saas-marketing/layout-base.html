@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SaaS marketing skeleton — brandkit</title>
+<meta name="description" content="A neutral SaaS marketing skeleton. Layout is fixed; only tokens and copy change.">
+<style>
+  /* === brandkit:tokens:start === */
+  :root {
+    --paper: #ffffff;
+    --paper-alt: #f6f7fb;
+    --ink: #0f1222;
+    --ink-muted: #5a6178;
+    --primary: #3d2cff;
+    --primary-ink: #ffffff;
+    --border: #e4e7f0;
+    --accent: #0fb5c9;
+    --heading-font: 'system-ui';
+    --body-font: 'system-ui';
+    --radius-cta: 10px;
+    --radius-card: 16px;
+    --radius-pill: 9999px;
+    --shadow-card: 0 1px 2px rgba(15, 18, 34, 0.05), 0 8px 22px rgba(15, 18, 34, 0.06);
+    --shadow-raised: 0 2px 4px rgba(15, 18, 34, 0.07), 0 18px 44px rgba(15, 18, 34, 0.12);
+  }
+  /* === brandkit:tokens:end === */
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { font-size: 17px; line-height: 1.6; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--body-font), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  h1, h2, h3 {
+    font-family: var(--heading-font), system-ui, "Segoe UI", sans-serif;
+    margin: 0 0 0.5em; line-height: 1.1; letter-spacing: -0.02em;
+  }
+  h1 { font-size: 3.1rem; }
+  h2 { font-size: 2.05rem; }
+  h3 { font-size: 1.05rem; }
+  p { margin: 0 0 1rem; }
+  a { color: var(--primary); }
+  .wrap { width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 32px; }
+  .band { padding: 76px 0; border-top: 1px solid var(--border); }
+  .band:first-of-type { border-top: 0; }
+  .skip { position: absolute; left: -9999px; }
+
+  .nav { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 18px 32px; }
+  .brand { font-family: var(--heading-font), system-ui, sans-serif; font-weight: 650; }
+  .nav__links { display: flex; gap: 22px; font-size: 0.94rem; }
+  .nav__links a { color: var(--ink); text-decoration: none; }
+
+  .eyebrow { font-size: 0.76rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--primary); font-weight: 600; margin: 0 0 0.75rem; }
+  .lead { font-size: 1.16rem; color: var(--ink-muted); }
+  .meta { font-size: 0.84rem; color: var(--ink-muted); margin: 0; }
+  .btn {
+    display: inline-block; background: var(--primary); color: var(--primary-ink);
+    border-radius: var(--radius-cta); padding: 14px 24px; font-weight: 600;
+    text-decoration: none; font-size: 0.95rem;
+  }
+  .btn--ghost { background: transparent; color: var(--ink); border: 1px solid var(--border); }
+  .card {
+    background: var(--paper-alt); border: 1px solid var(--border);
+    border-radius: var(--radius-card); padding: 26px; box-shadow: var(--shadow-card);
+  }
+  .card:hover { box-shadow: var(--shadow-raised); }
+
+  /* hero-split */
+  .hero { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 56px; align-items: center; padding-top: 56px; }
+  .hero__actions { display: flex; gap: 12px; flex-wrap: wrap; margin: 1.25rem 0 0.9rem; }
+  .panel {
+    border-radius: var(--radius-card); border: 1px solid var(--border);
+    background-image: linear-gradient(160deg, var(--paper-alt), var(--paper));
+    box-shadow: var(--shadow-raised); padding: 22px; min-height: 320px;
+  }
+  .panel__row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px dashed var(--border); font-size: 0.88rem; color: var(--ink-muted); }
+  .panel__row:last-child { border-bottom: 0; }
+  .dot { width: 9px; height: 9px; border-radius: var(--radius-pill); background: var(--accent); }
+  .bar { height: 8px; border-radius: var(--radius-pill); background: var(--border); }
+  .bar--primary { background: var(--primary); }
+  .bar--accent { background: var(--accent); }
+
+  /* split-media */
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+  .split--reverse .split__text { order: 2; }
+  .quote { border-left: 3px solid var(--accent); padding-left: 20px; }
+  .quote blockquote { margin: 0 0 0.6rem; font-size: 1.2rem; font-family: var(--heading-font), system-ui, sans-serif; }
+
+  /* pricing-tiers */
+  .tiers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; align-items: stretch; }
+  .tier { display: flex; flex-direction: column; }
+  .tier__name { font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-muted); margin: 0 0 0.5rem; }
+  .tier__price { font-family: var(--heading-font), system-ui, sans-serif; font-size: 2.3rem; margin: 0 0 0.6rem; }
+  .tier__body { color: var(--ink-muted); font-size: 0.95rem; }
+  .tier__cta { margin-top: auto; }
+  .tier__meta { margin-top: 0.7rem; }
+
+  /* faq-list */
+  .faq { display: grid; gap: 18px; }
+  .faq__item { border: 1px solid var(--border); border-radius: var(--radius-card); padding: 22px 24px; background: var(--paper-alt); }
+  .faq__q { font-family: var(--heading-font), system-ui, sans-serif; font-size: 1.05rem; margin: 0 0 0.45rem; }
+  .faq__a { margin: 0; color: var(--ink-muted); }
+
+  /* testimonial-single */
+  .testimonial { text-align: center; max-width: 720px; margin: 0 auto; }
+  .testimonial blockquote { margin: 0 0 1rem; font-family: var(--heading-font), system-ui, sans-serif; font-size: 1.6rem; line-height: 1.3; }
+  .testimonial__by { font-weight: 600; margin: 0; }
+
+  /* cta-banner */
+  .close { background: var(--paper-alt); text-align: center; }
+
+  /* footer-legal */
+  .footer { display: flex; justify-content: space-between; gap: 28px; flex-wrap: wrap; }
+  .footer__links { display: flex; gap: 18px; list-style: none; margin: 0 0 0.6rem; padding: 0; }
+  .footer__links a { color: var(--ink-muted); text-decoration: none; font-size: 0.85rem; }
+
+  @media (max-width: 860px) {
+    .hero, .split, .tiers { grid-template-columns: 1fr; }
+    .split--reverse .split__text { order: 0; }
+    h1 { font-size: 2.3rem; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#hero">Skip to content</a>
+
+<header class="band" data-band="nav" data-block="nav-bar" style="padding:0">
+  <div class="nav">
+    <span class="brand" data-slot="nav-bar.brand">Ledgerline</span>
+    <nav class="nav__links" data-repeat="nav-bar.nav-item" aria-label="Main">
+      <a href="#" data-slot="nav-bar.nav-item[0]">Product</a>
+      <a href="#" data-slot="nav-bar.nav-item[1]">Customers</a>
+      <a href="#" data-slot="nav-bar.nav-item[2]">Pricing</a>
+      <a href="#" data-slot="nav-bar.nav-item[3]">Changelog</a>
+    </nav>
+    <a class="btn" href="#" data-slot="nav-bar.cta">Book a demo</a>
+  </div>
+</header>
+
+<section class="band" id="hero" data-band="hero" data-block="hero-split">
+  <div class="wrap hero">
+    <div>
+      <p class="eyebrow" data-slot="hero-split.eyebrow">Revenue operations</p>
+      <h1 data-slot="hero-split.h1">Every invoice, reconciled before your coffee goes cold</h1>
+      <p class="lead" data-slot="hero-split.lead">Ledgerline reads your bank feed and your billing system, matches them line by line, and shows you the twelve invoices that actually need a human.</p>
+      <div class="hero__actions">
+        <a class="btn" href="#" data-slot="hero-split.cta">Start a free month</a>
+        <a class="btn btn--ghost" href="#" data-slot="hero-split.cta-secondary">Watch the walkthrough</a>
+      </div>
+      <p class="meta" data-slot="hero-split.meta">Connects to 14 banks and 6 billing tools. Read-only access.</p>
+    </div>
+    <div class="panel" aria-hidden="true">
+      <div class="panel__row"><span class="dot"></span><span class="bar bar--primary" style="width:52%"></span><span>Matched</span></div>
+      <div class="panel__row"><span class="dot" style="background:var(--border)"></span><span class="bar" style="width:38%"></span><span>Pending</span></div>
+      <div class="panel__row"><span class="dot" style="background:var(--primary)"></span><span class="bar bar--accent" style="width:64%"></span><span>Needs review</span></div>
+      <div class="panel__row"><span class="dot"></span><span class="bar" style="width:44%"></span><span>Same as last month</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="band" data-band="explain" data-block="split-media">
+  <div class="wrap split split--reverse">
+    <div class="split__text">
+      <p class="eyebrow" data-slot="split-media.eyebrow">The matching engine</p>
+      <h2 data-slot="split-media.h2">Rules you can read, not a model you have to trust</h2>
+      <p data-slot="split-media.body">Every match is a rule with a name, a version and a diff. When finance disagrees with the software, you open the rule and change it — no retraining, no support ticket, no quarterly black box.</p>
+      <p><a class="btn" href="#" data-slot="split-media.cta">Browse the rule library</a></p>
+      <p class="meta" data-slot="split-media.meta">Rules are versioned in git and reviewed like code.</p>
+    </div>
+    <div class="panel" aria-hidden="true">
+      <div class="panel__row"><span class="bar bar--accent" style="width:30%"></span><span>amount within 0.5%</span></div>
+      <div class="panel__row"><span class="bar bar--primary" style="width:46%"></span><span>reference contains invoice id</span></div>
+      <div class="panel__row"><span class="bar" style="width:56%"></span><span>date within 4 working days</span></div>
+      <div class="panel__row"><span class="bar bar--accent" style="width:22%"></span><span>currency must agree</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="band" data-band="commercial" data-block="pricing-tiers">
+  <div class="wrap">
+    <p class="eyebrow" data-slot="pricing-tiers.eyebrow">Pricing</p>
+    <h2 data-slot="pricing-tiers.h2">Priced per reconciled invoice, not per seat</h2>
+    <div class="tiers" data-repeat="pricing-tiers.tier">
+      <article class="card tier">
+        <p class="tier__name" data-slot="pricing-tiers.item-name[0]">Solo</p>
+        <p class="tier__price" data-slot="pricing-tiers.item-price[0]">€0</p>
+        <p class="tier__body" data-slot="pricing-tiers.item-body[0]">Up to 50 reconciled invoices a month, one bank connection, community support.</p>
+        <p class="tier__cta"><a class="btn btn--ghost" href="#" data-slot="pricing-tiers.item-cta[0]">Start free</a></p>
+        <p class="meta tier__meta" data-slot="pricing-tiers.item-meta[0]">No card required</p>
+      </article>
+      <article class="card tier">
+        <p class="tier__name" data-slot="pricing-tiers.item-name[1]">Studio</p>
+        <p class="tier__price" data-slot="pricing-tiers.item-price[1]">€240</p>
+        <p class="tier__body" data-slot="pricing-tiers.item-body[1]">Two thousand invoices, unlimited connections, rule history and an audit log.</p>
+        <p class="tier__cta"><a class="btn" href="#" data-slot="pricing-tiers.item-cta[1]">Start a month</a></p>
+        <p class="meta tier__meta" data-slot="pricing-tiers.item-meta[1]">Billed monthly, cancel anytime</p>
+      </article>
+      <article class="card tier">
+        <p class="tier__name" data-slot="pricing-tiers.item-name[2]">Firm</p>
+        <p class="tier__price" data-slot="pricing-tiers.item-price[2]">€980</p>
+        <p class="tier__body" data-slot="pricing-tiers.item-body[2]">Unlimited volume, single sign-on, a named engineer and a 4-hour response.</p>
+        <p class="tier__cta"><a class="btn btn--ghost" href="#" data-slot="pricing-tiers.item-cta[2]">Talk to us</a></p>
+        <p class="meta tier__meta" data-slot="pricing-tiers.item-meta[2]">Annual invoicing available</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="band" data-band="proof" data-block="testimonial-single">
+  <div class="wrap testimonial">
+    <blockquote data-slot="testimonial-single.quote">We closed the month in one afternoon instead of three days, and the audit trail wrote itself.</blockquote>
+    <p class="testimonial__by" data-slot="testimonial-single.attribution">Head of finance, a fictional customer</p>
+    <p class="meta" data-slot="testimonial-single.meta">This skeleton ships with invented copy on purpose. Nothing here is a real endorsement.</p>
+  </div>
+</section>
+
+<section class="band" data-band="support" data-block="faq-list">
+  <div class="wrap">
+    <p class="eyebrow" data-slot="faq-list.eyebrow">Questions</p>
+    <h2 data-slot="faq-list.h2">Answered before you have to ask</h2>
+    <div class="faq" data-repeat="faq-list.entry">
+      <div class="faq__item">
+        <p class="faq__q" data-slot="faq-list.item-q[0]">Does Ledgerline move money?</p>
+        <p class="faq__a" data-slot="faq-list.item-a[0]">No. It holds read-only bank credentials and never initiates a payment. Writes happen only in your billing system, and only when you approve a match.</p>
+      </div>
+      <div class="faq__item">
+        <p class="faq__q" data-slot="faq-list.item-q[1]">What happens when a rule is wrong?</p>
+        <p class="faq__a" data-slot="faq-list.item-a[1]">You edit the rule, and the change is versioned. Every invoice it touched is listed so you can re-run just those.</p>
+      </div>
+      <div class="faq__item">
+        <p class="faq__q" data-slot="faq-list.item-q[2]">Where is the data stored?</p>
+        <p class="faq__a" data-slot="faq-list.item-a[2]">In Frankfurt, encrypted at rest, with a documented retention window you can shorten or extend.</p>
+      </div>
+      <div class="faq__item">
+        <p class="faq__q" data-slot="faq-list.item-q[3]">Can I export everything and leave?</p>
+        <p class="faq__a" data-slot="faq-list.item-a[3]">Yes: matches, rules and decisions export as CSV and JSON from the settings page, without asking us.</p>
+      </div>
+    </div>
+    <p class="meta" data-slot="faq-list.meta">Still stuck? The support address is at the bottom of every page.</p>
+  </div>
+</section>
+
+<section class="band close" data-band="close" data-block="cta-banner">
+  <div class="wrap">
+    <h2 data-slot="cta-banner.h2">Reconcile one month with us</h2>
+    <p class="lead" data-slot="cta-banner.lead">Upload a statement, watch the matching, decide afterwards.</p>
+    <p><a class="btn" href="#" data-slot="cta-banner.cta">Open a workspace</a></p>
+    <p class="meta" data-slot="cta-banner.meta">Thirty days, then €240 a month or nothing at all.</p>
+  </div>
+</section>
+
+<footer class="band" data-band="footer" data-block="footer-legal">
+  <div class="wrap footer">
+    <p data-slot="footer-legal.footer">Ledgerline — a neutral skeleton authored for brandkit-lab.</p>
+    <div>
+      <ul class="footer__links" data-repeat="footer-legal.nav-item">
+        <li><a href="#" data-slot="footer-legal.nav-item[0]">Security</a></li>
+        <li><a href="#" data-slot="footer-legal.nav-item[1]">Privacy</a></li>
+        <li><a href="#" data-slot="footer-legal.nav-item[2]">Terms</a></li>
+      </ul>
+      <p class="meta" data-slot="footer-legal.meta">Ledgerline B.V., a fictional company. No external requests on this page.</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

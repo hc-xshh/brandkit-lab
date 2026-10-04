@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Product security skeleton — brandkit</title>
+<meta name="description" content="A neutral security-product skeleton. Layout is fixed; only tokens and copy change.">
+<style>
+  /* === brandkit:tokens:start === */
+  :root {
+    --paper: #ffffff;
+    --paper-alt: #f4f6f8;
+    --ink: #0e1418;
+    --ink-muted: #58656f;
+    --primary: #0b6e6a;
+    --primary-ink: #ffffff;
+    --border: #dde3e8;
+    --accent: #b8730b;
+    --heading-font: 'system-ui';
+    --body-font: 'system-ui';
+    --radius-cta: 6px;
+    --radius-card: 12px;
+    --radius-pill: 9999px;
+    --shadow-card: 0 1px 2px rgba(14, 20, 24, 0.06), 0 6px 18px rgba(14, 20, 24, 0.07);
+    --shadow-raised: 0 2px 4px rgba(14, 20, 24, 0.08), 0 16px 36px rgba(14, 20, 24, 0.12);
+  }
+  /* === brandkit:tokens:end === */
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { font-size: 17px; line-height: 1.6; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--body-font), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  h1, h2, h3 {
+    font-family: var(--heading-font), "Segoe UI", system-ui, sans-serif;
+    margin: 0 0 0.5em; line-height: 1.14; letter-spacing: -0.015em;
+  }
+  h1 { font-size: 2.9rem; }
+  h2 { font-size: 1.9rem; }
+  h3 { font-size: 1.05rem; }
+  p { margin: 0 0 1rem; }
+  a { color: var(--primary); }
+  .wrap { width: 100%; max-width: 1060px; margin: 0 auto; padding: 0 32px; }
+  .band { padding: 68px 0; border-top: 1px solid var(--border); }
+  .band:first-of-type { border-top: 0; }
+  .skip { position: absolute; left: -9999px; }
+
+  .nav { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 18px 32px; }
+  .brand { font-weight: 650; font-family: var(--heading-font), system-ui, sans-serif; }
+  .nav__links { display: flex; gap: 22px; font-size: 0.93rem; }
+  .nav__links a { color: var(--ink); text-decoration: none; }
+
+  .eyebrow { font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-muted); font-weight: 650; margin: 0 0 0.7rem; }
+  .lead { font-size: 1.14rem; color: var(--ink-muted); }
+  .meta { font-size: 0.84rem; color: var(--ink-muted); margin: 0; }
+  .btn {
+    display: inline-block; background: var(--primary); color: var(--primary-ink);
+    border-radius: var(--radius-cta); padding: 13px 22px; font-weight: 600;
+    text-decoration: none; font-size: 0.94rem;
+  }
+  .btn--ghost { background: transparent; color: var(--ink); border: 1px solid var(--border); }
+  .card {
+    background: var(--paper-alt); border: 1px solid var(--border);
+    border-radius: var(--radius-card); padding: 24px; box-shadow: var(--shadow-card);
+  }
+  .card:hover { box-shadow: var(--shadow-raised); }
+
+  .hero { text-align: center; }
+  .hero p.lead { max-width: 640px; margin: 0 auto 1.4rem; }
+  .hero__actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 1rem; }
+
+  .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+  .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; text-align: center; }
+  .stat__value { font-family: var(--heading-font), system-ui, sans-serif; font-size: 2.1rem; margin: 0; color: var(--primary); line-height: 1.15; }
+  .stat__label { font-size: 0.88rem; color: var(--ink-muted); margin: 0; }
+
+  .checks { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 32px; }
+  .check { display: flex; gap: 14px; align-items: flex-start; padding: 16px 0; border-bottom: 1px solid var(--border); }
+  .check__box {
+    flex: 0 0 auto; width: 20px; height: 20px; margin-top: 3px;
+    border-radius: var(--radius-cta); background: var(--primary);
+    color: var(--primary-ink); font-size: 0.72rem; line-height: 20px; text-align: center; font-weight: 700;
+  }
+  .check__label { margin: 0; font-weight: 620; }
+  .check__body { margin: 0.25rem 0 0; color: var(--ink-muted); font-size: 0.94rem; }
+
+  .faq { display: grid; gap: 16px; }
+  .faq__item { border-left: 3px solid var(--accent); padding-left: 20px; }
+  .faq__q { font-family: var(--heading-font), system-ui, sans-serif; font-size: 1.05rem; margin: 0 0 0.35rem; }
+  .faq__a { margin: 0 0 0.9rem; color: var(--ink-muted); }
+
+  .close { background: var(--paper-alt); text-align: center; }
+
+  .footer { display: flex; justify-content: space-between; gap: 28px; flex-wrap: wrap; }
+  .footer__links { display: flex; gap: 18px; list-style: none; margin: 0 0 0.6rem; padding: 0; }
+  .footer__links a { color: var(--ink-muted); text-decoration: none; font-size: 0.85rem; }
+
+  @media (max-width: 860px) {
+    .grid, .stats, .checks { grid-template-columns: 1fr; }
+    h1 { font-size: 2.2rem; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#hero">Skip to content</a>
+
+<header class="band" data-band="nav" data-block="nav-bar" style="padding:0">
+  <div class="nav">
+    <span class="brand" data-slot="nav-bar.brand">Bastion</span>
+    <nav class="nav__links" data-repeat="nav-bar.nav-item" aria-label="Main">
+      <a href="#" data-slot="nav-bar.nav-item[0]">Platform</a>
+      <a href="#" data-slot="nav-bar.nav-item[1]">Compliance</a>
+      <a href="#" data-slot="nav-bar.nav-item[2]">Docs</a>
+      <a href="#" data-slot="nav-bar.nav-item[3]">Status</a>
+    </nav>
+    <a class="btn" href="#" data-slot="nav-bar.cta">Request access</a>
+  </div>
+</header>
+
+<section class="band hero" id="hero" data-band="hero" data-block="hero-center">
+  <div class="wrap">
+    <p class="eyebrow" data-slot="hero-center.eyebrow">Dependency security</p>
+    <h1 data-slot="hero-center.h1">Know what you shipped before someone else does</h1>
+    <p class="lead" data-slot="hero-center.lead">Bastion reads your lockfiles, your images and your build provenance, then tells you which of the 4,100 known issues actually reach your production surface.</p>
+    <div class="hero__actions">
+      <a class="btn" href="#" data-slot="hero-center.cta">Scan a repository</a>
+      <a class="btn btn--ghost" href="#" data-slot="hero-center.cta-secondary">See a sample report</a>
+    </div>
+    <p class="meta" data-slot="hero-center.meta">Runs from CI, needs read access to nothing but your source.</p>
+  </div>
+</section>
+
+<section class="band" data-band="numbers" data-block="stat-band">
+  <div class="wrap">
+    <div class="stats" data-repeat="stat-band.stat">
+      <div>
+        <p class="stat__value" data-slot="stat-band.item-value[0]">4,100</p>
+        <p class="stat__label" data-slot="stat-band.item-label[0]">Advisories tracked</p>
+      </div>
+      <div>
+        <p class="stat__value" data-slot="stat-band.item-value[1]">38 min</p>
+        <p class="stat__label" data-slot="stat-band.item-label[1]">Median fix after publication</p>
+      </div>
+      <div>
+        <p class="stat__value" data-slot="stat-band.item-value[2]">0</p>
+        <p class="stat__label" data-slot="stat-band.item-label[2]">Write permissions requested</p>
+      </div>
+      <div>
+        <p class="stat__value" data-slot="stat-band.item-value[3]">12k</p>
+        <p class="stat__label" data-slot="stat-band.item-label[3]">Repositories scanned weekly</p>
+      </div>
+    </div>
+    <p class="meta" data-slot="stat-band.meta">Figures from our own build telemetry, fictional but internally consistent.</p>
+  </div>
+</section>
+
+<section class="band" data-band="features" data-block="feature-grid-3">
+  <div class="wrap">
+    <p class="eyebrow" data-slot="feature-grid-3.eyebrow">Three pillars</p>
+    <h2 data-slot="feature-grid-3.h2">Reachability, provenance, response</h2>
+    <div class="grid" data-repeat="feature-grid-3.feature">
+      <article class="card">
+        <h3 data-slot="feature-grid-3.item-title[0]">Reachability, not counts</h3>
+        <p data-slot="feature-grid-3.item-body[0]">A vulnerable function that no code path calls is reported, ranked last, and never pages anyone at 3am.</p>
+      </article>
+      <article class="card">
+        <h3 data-slot="feature-grid-3.item-title[1]">Build provenance</h3>
+        <p data-slot="feature-grid-3.item-body[1]">Every artefact carries a signed statement of how it was built, so an unreproducible image is a build failure, not a surprise.</p>
+      </article>
+      <article class="card">
+        <h3 data-slot="feature-grid-3.item-title[2]">A patch, not a ticket</h3>
+        <p data-slot="feature-grid-3.item-body[2]">Where a safe version exists, you get the exact version bump as a reviewable diff against your own lockfile.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="band" data-band="controls" data-block="checklist-band">
+  <div class="wrap">
+    <p class="eyebrow" data-slot="checklist-band.eyebrow">Controls</p>
+    <h2 data-slot="checklist-band.h2">What runs on every commit</h2>
+    <div class="checks" data-repeat="checklist-band.check">
+      <div class="check">
+        <span class="check__box" aria-hidden="true">&#10003;</span>
+        <div>
+          <p class="check__label" data-slot="checklist-band.item-label[0]">Lockfile diff review</p>
+          <p class="check__body" data-slot="checklist-band.item-body[0]">Any new transitive dependency is flagged with its maintainer history.</p>
+        </div>
+      </div>
+      <div class="check">
+        <span class="check__box" aria-hidden="true">&#10003;</span>
+        <div>
+          <p class="check__label" data-slot="checklist-band.item-label[1]">Secret scanning</p>
+          <p class="check__body" data-slot="checklist-band.item-body[1]">High-entropy strings and known key shapes, checked against your allowlist.</p>
+        </div>
+      </div>
+      <div class="check">
+        <span class="check__box" aria-hidden="true">&#10003;</span>
+        <div>
+          <p class="check__label" data-slot="checklist-band.item-label[2]">Licence compatibility</p>
+          <p class="check__body" data-slot="checklist-band.item-body[2]">Copyleft in a distributed binary is a failing check, not a warning.</p>
+        </div>
+      </div>
+      <div class="check">
+        <span class="check__box" aria-hidden="true">&#10003;</span>
+        <div>
+          <p class="check__label" data-slot="checklist-band.item-label[3]">Base image freshness</p>
+          <p class="check__body" data-slot="checklist-band.item-body[3]">An image older than thirty days fails the build with a suggested tag.</p>
+        </div>
+      </div>
+      <div class="check">
+        <span class="check__box" aria-hidden="true">&#10003;</span>
+        <div>
+          <p class="check__label" data-slot="checklist-band.item-label[4]">SBOM generation</p>
+          <p class="check__body" data-slot="checklist-band.item-body[4]">CycloneDX and SPDX, attached to the release, never uploaded anywhere.</p>
+        </div>
+      </div>
+      <div class="check">
+        <span class="check__box" aria-hidden="true">&#10003;</span>
+        <div>
+          <p class="check__label" data-slot="checklist-band.item-label[5]">Policy as code</p>
+          <p class="check__body" data-slot="checklist-band.item-body[5]">The rules live in your repository and are reviewed like any other change.</p>
+        </div>
+      </div>
+    </div>
+    <p class="meta" data-slot="checklist-band.meta">Six checks, one required status, no dashboard to remember to open.</p>
+  </div>
+</section>
+
+<section class="band" data-band="support" data-block="faq-list">
+  <div class="wrap">
+    <p class="eyebrow" data-slot="faq-list.eyebrow">Straight answers</p>
+    <h2 data-slot="faq-list.h2">The questions a security reviewer asks first</h2>
+    <div class="faq" data-repeat="faq-list.entry">
+      <div class="faq__item">
+        <p class="faq__q" data-slot="faq-list.item-q[0]">Does Bastion need my source code?</p>
+        <p class="faq__a" data-slot="faq-list.item-a[0]">It needs your manifest files and a call graph, both of which it computes from a shallow checkout you delete afterwards.</p>
+      </div>
+      <div class="faq__item">
+        <p class="faq__q" data-slot="faq-list.item-q[1]">Where does the advisory data come from?</p>
+        <p class="faq__a" data-slot="faq-list.item-a[1]">Public databases, plus maintainer advisories we mirror, with the ingest timestamp shown on every finding.</p>
+      </div>
+      <div class="faq__item">
+        <p class="faq__q" data-slot="faq-list.item-q[2]">What if a finding is a false positive?</p>
+        <p class="faq__a" data-slot="faq-list.item-a[2]">Suppress it in the policy file with a reason and an expiry date. Suppressions without an expiry are rejected.</p>
+      </div>
+    </div>
+    <p class="meta" data-slot="faq-list.meta">Full documentation ships with the skeleton's sibling page in this repository.</p>
+  </div>
+</section>
+
+<section class="band close" data-band="close" data-block="cta-banner">
+  <div class="wrap">
+    <h2 data-slot="cta-banner.h2">Scan a repository on Monday morning</h2>
+    <p class="lead" data-slot="cta-banner.lead">The first report is free and takes one workflow file.</p>
+    <p><a class="btn" href="#" data-slot="cta-banner.cta">Request access</a></p>
+    <p class="meta" data-slot="cta-banner.meta">No sales call unless you ask for one.</p>
+  </div>
+</section>
+
+<footer class="band" data-band="footer" data-block="footer-legal">
+  <div class="wrap footer">
+    <p data-slot="footer-legal.footer">Bastion — a neutral skeleton authored for brandkit-lab.</p>
+    <div>
+      <ul class="footer__links" data-repeat="footer-legal.nav-item">
+        <li><a href="#" data-slot="footer-legal.nav-item[0]">Security</a></li>
+        <li><a href="#" data-slot="footer-legal.nav-item[1]">Sub-processors</a></li>
+        <li><a href="#" data-slot="footer-legal.nav-item[2]">Terms</a></li>
+      </ul>
+      <p class="meta" data-slot="footer-legal.meta">Bastion is fictional. This page makes no network requests.</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
