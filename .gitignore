@@ -1,0 +1,22 @@
+# generated artefacts
+out/
+
+# python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+.venv/
+venv/
+
+# pages build scratch
+docs/img/*.tmp.png
+
+# fetched brand sources (only created by --save-html)
+sources/fetched/
+
+# editors / os
+.DS_Store
+*.swp
+.idea/
+.vscode/
