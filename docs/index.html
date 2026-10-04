@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>brandkit-lab — measured brand kits, unbroken layouts</title>
+<meta name="description" content="A brand source page becomes a frozen token kit and a DESIGN.md,
+then restyles neutral landing skeletons without moving the DOM tree. Generated evidence, no CDN.">
+<style>
+:root {
+  --ink: #0d1117; --ink-2: #4a5568; --line: #e2e8f0; --paper: #ffffff;
+  --paper-2: #f6f8fb; --accent: #1f5df6; --accent-ink: #ffffff;
+  --ok: #0f7b52; --warn: #a45a00; --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font: 16px/1.62 system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 28px; }
+header.top {
+  background: linear-gradient(160deg, #0b1120 0%, #131c31 60%, #1b2740 100%);
+  color: #eef2fb; padding: 64px 0 56px; border-bottom: 1px solid #22304d;
+}
+header.top h1 { font-size: 2.5rem; line-height: 1.1; margin: 0 0 .5rem; letter-spacing: -0.02em; }
+header.top p.lede { font-size: 1.12rem; color: #b9c6dd; max-width: 72ch; margin: 0 0 1.4rem; }
+.kicker {
+  font: 600 .74rem/1 system-ui, sans-serif; letter-spacing: .16em; text-transform: uppercase;
+  color: #8fa6cc; margin: 0 0 .9rem;
+}
+.pipeline {
+  display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+  font-family: var(--mono); font-size: .84rem; color: #cbd7ec;
+}
+.pipeline span { border: 1px solid #2c3b5c; border-radius: 999px; padding: 5px 12px; background: #16203a; }
+.pipeline b { color: #7d93b8; font-weight: 400; }
+section { padding: 56px 0; border-bottom: 1px solid var(--line); }
+section:last-of-type { border-bottom: 0; }
+h2 { font-size: 1.6rem; margin: 0 0 .4rem; letter-spacing: -0.01em; }
+h2 + p.sub { color: var(--ink-2); margin: 0 0 2rem; max-width: 84ch; }
+h3 { font-size: 1.05rem; margin: 0 0 .35rem; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.stat { border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; background: var(--paper-2); }
+.stat b { display: block; font: 600 1.9rem/1.1 var(--mono); letter-spacing: -0.02em; }
+.stat span { color: var(--ink-2); font-size: .84rem; }
+.stat small { display: block; color: #7a869a; font-size: .74rem; margin-top: .3rem; }
+table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+th { font-weight: 620; color: var(--ink-2); font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; }
+td.num, th.num { font-family: var(--mono); text-align: right; }
+.pass { color: var(--ok); font-weight: 600; }
+.warn { color: var(--warn); font-weight: 600; }
+.shotgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.shot { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--paper-2); }
+.shot .cap {
+  padding: 11px 14px; border-bottom: 1px solid var(--line); background: var(--paper);
+  font-size: .82rem; display: flex; justify-content: space-between; gap: 8px; align-items: baseline;
+}
+.shot .cap b { font-weight: 620; }
+.shot .cap span { color: #7a869a; font-family: var(--mono); font-size: .74rem; }
+.shot .frame {
+  max-height: 540px; overflow: hidden; background: var(--paper);
+  -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
+}
+.shot img { width: 100%; display: block; }
+.shot .open { padding: 10px 14px; font-size: .78rem; color: var(--ink-2); }
+.shot .open a { color: var(--accent); }
+.skeleton-block { margin-bottom: 40px; }
+.skeleton-block h3 { display: flex; gap: 10px; align-items: baseline; }
+.skeleton-block h3 span { color: var(--ink-2); font-weight: 400; font-size: .84rem; }
+.swatches { display: flex; flex-wrap: wrap; gap: 10px; }
+.swatch {
+  border: 1px solid var(--line); border-radius: 10px; overflow: hidden; min-width: 118px;
+  font-family: var(--mono); font-size: .72rem;
+}
+.swatch .chip { height: 44px; }
+.swatch .meta { padding: 7px 9px; background: var(--paper); }
+.swatch .meta b { display: block; font-weight: 600; }
+.callout {
+  border: 1px solid #f0d9a8; background: #fff9ec; border-radius: 12px; padding: 18px 20px; margin: 18px 0 0;
+}
+.callout h3 { color: #7a4a00; }
+.callout code { font-family: var(--mono); font-size: .85rem; background: #fff; padding: 1px 5px; border-radius: 4px; border: 1px solid #f0e2c4; }
+pre {
+  background: #0b1120; color: #d7e2f5; border-radius: 12px; padding: 18px 20px; overflow-x: auto;
+  font-family: var(--mono); font-size: .84rem; line-height: 1.55;
+}
+pre .c { color: #7f93b5; }
+footer { padding: 36px 0 56px; color: var(--ink-2); font-size: .86rem; }
+footer b { color: var(--ink); }
+@media (max-width: 960px) {
+  .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .shotgrid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <p class="kicker">brandkit-lab · dependency-free Python · generated gallery</p>
+    <h1>A brand page in. A frozen kit out. The layout does not move.</h1>
+    <p class="lede">One measurable pipeline: measure the facts a brand source actually declares,
+    draft only the words, assemble a single kit that is the sole writer of every token, and bind it
+    onto neutral landing skeletons while proving the band list and repeat counts are unchanged.</p>
+    <div class="pipeline">
+      <span>source.html</span><b>→</b><span>measure</span><b>→</b><span>metrics.json</span>
+      <b>→</b><span>draft (LLM seam)</span><b>→</b><span>assemble_kit</span><b>→</b>
+      <span>kit.json · kit.css · tokens.csv · DESIGN.md</span><b>→</b><span>apply + proof.json</span>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2>What the harness measured, not what the README claims</h2>
+    <p class="sub">Written by <code>scripts/eval_report.py</code> into <code>docs/eval.json</code>.
+    The same script exits non-zero if any of these thresholds regress, so this table is a gate,
+    not a souvenir.</p>
+    <div class="grid-4"><div class="stat"><b>12</b><span>kits produced</span><small>3 sources × 4 skeletons</small></div><div class="stat"><b>100%</b><span>tree unchanged</span><small>band list + repeats byte-identical</small></div><div class="stat"><b>4.71:1</b><span>worst enforced contrast</span><small>WCAG AA floor is 4.50:1</small></div><div class="stat"><b>100%</b><span>byte-identical reruns</span><small>90 bands, 1362 elements</small></div></div>
+    <table style="margin-top:26px">
+      <thead><tr>
+        <th>source</th><th>skeleton</th><th class="num">slots</th><th class="num">worst contrast</th>
+        <th class="num">bands</th><th class="num">repeats</th><th class="num">guardrails</th>
+        <th class="num">tree</th><th class="num">determin.</th><th class="num">kit hash</th>
+      </tr></thead>
+      <tbody><tr><td>northwind-outfitters</td><td>01-host-landing</td><td class='num'>37/44</td><td class='num'>5.19:1</td><td class='num'>7</td><td class='num'>18</td><td class='num'>0</td><td class='num'>yes</td><td class='num'>yes</td><td class='num'>a4d53894783bdbe3</td></tr><tr><td>northwind-outfitters</td><td>02-saas-marketing</td><td class='num'>50/57</td><td class='num'>5.19:1</td><td class='num'>8</td><td class='num'>14</td><td class='num'>0</td><td class='num'>yes</td><td class='num'>yes</td><td class='num'>6c577c388b752d32</td></tr><tr><td>northwind-outfitters</td><td>03-product-security</td><td class='num'>55/62</td><td class='num'>5.19:1</td><td class='num'>8</td><td class='num'>23</td><td class='num'>0</td><td class='num'>yes</td><td class='num'>yes</td><td class='num'>988d3f87c17da547</td></tr><tr><td>northwind-outfitters</td><td>04-insurance-longform</td><td class='num'>44/51</td><td class='num'>5.19:1</td><td class='num'>7</td><td class='num'>19</td><td class='num'>0</td><td class='num'>yes</td><td class='num'>yes</td><td class='num'>76285c1b141fde68</td></tr><tr><td>pulse-analytics</td><td>01-host-landing</td><td class='num'>37/44</td><td class='num'>5.75:1</td><td class='num'>7</td><td class='num'>18</td><td class='num'>0</td><td class='num'>yes</td><td class='num'>yes</td><td class='num'>da539de7a31355a2</td></tr><tr><td>pulse-analytics</td><td>02-saas-marketing</td><td class='num'>50/57</td><td class='num'>5.75:1</td><td class='num'>8</td><td class='num'>14</td><td class='num'>0</td><td class='num'>yes</td><td class='num'>yes</td><td class='num'>df9908cd1463a443</td></tr><tr><td>pulse-analytics</td><td>03-product-security</td><td class='num'>55/62</td><td class='num'>5.75:1</td><td class='num'>8</td><td class='num'>23</td><td class='num'>0</td><td class='num'>yes</td><td class='num'>yes</td><td class='num'>95075f01f07db3b8</td></tr><tr><td>pulse-analytics</td><td>04-insurance-longform</td><td class='num'>44/51</td><td class='num'>5.75:1</td><td class='num'>7</td><td class='num'>19</td><td class='num'>0</td><td class='num'>yes</td><td class='num'>yes</td><td class='num'>ed06b97b255383f6</td></tr><tr><td>slate-assurance</td><td>01-host-landing</td><td class='num'>37/44</td><td class='num'>4.71:1</td><td class='num'>7</td><td class='num'>18</td><td class='num'>2</td><td class='num'>yes</td><td class='num'>yes</td><td class='num'>a2b54807daec725e</td></tr><tr><td>slate-assurance</td><td>02-saas-marketing</td><td class='num'>50/57</td><td class='num'>4.71:1</td><td class='num'>8</td><td class='num'>14</td><td class='num'>2</td><td class='num'>yes</td><td class='num'>yes</td><td class='num'>1e6538956255b65c</td></tr><tr><td>slate-assurance</td><td>03-product-security</td><td class='num'>55/62</td><td class='num'>4.71:1</td><td class='num'>8</td><td class='num'>23</td><td class='num'>2</td><td class='num'>yes</td><td class='num'>yes</td><td class='num'>52ab138e6865a20c</td></tr><tr><td>slate-assurance</td><td>04-insurance-longform</td><td class='num'>44/51</td><td class='num'>4.71:1</td><td class='num'>7</td><td class='num'>19</td><td class='num'>2</td><td class='num'>yes</td><td class='num'>yes</td><td class='num'>2eb3778a778ed8df</td></tr></tbody>
+    </table>
+    <p class="sub" style="margin-top:16px">Token fingerprints — one kit per brand, identical on
+    every skeleton it is bound to:
+    <code>northwind-outfitters</code> 22154ef0e7146259 · <code>pulse-analytics</code> d24e19983a058d99 · <code>slate-assurance</code> 8813880cf89bb8b1.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Before and after, rendered in headless Chrome</h2>
+    <p class="sub">Left: the skeleton with its own neutral theme. Then the same untouched markup
+    carrying each brand's kit. The band list, the number of bands and every repeat count are
+    identical in all three; only the token block and the copy slots differ. Screenshots are
+    full-page captures of the local <code>file://</code> pages — no CDN, no webfonts, so what you
+    see is what CI renders.</p>
+    <div class="skeleton-block"><h3>01 · Host / landing<span>nav · centred hero · proof strip · 3-up grid · stats · close · footer</span></h3><div class="shotgrid"><figure class="shot" style="margin:0"><div class="cap"><b>before</b><span>Skeleton, untouched</span></div><div class="frame"><img src="img/before-01-host-landing.png" alt="before on 01-host-landing" loading="lazy"></div><div class="open"><a href="img/before-01-host-landing.png">open full page PNG</a></div></figure><figure class="shot" style="margin:0"><div class="cap"><b>Northwind Outfitters</b><span>5.19:1 worst · 37 slots</span></div><div class="frame"><img src="img/after-northwind-outfitters--01-host-landing.png" alt="Northwind Outfitters on 01-host-landing" loading="lazy"></div><div class="open"><a href="img/after-northwind-outfitters--01-host-landing.png">open full page PNG</a></div></figure><figure class="shot" style="margin:0"><div class="cap"><b>Slate Assurance</b><span>4.71:1 worst · 37 slots</span></div><div class="frame"><img src="img/after-slate-assurance--01-host-landing.png" alt="Slate Assurance on 01-host-landing" loading="lazy"></div><div class="open"><a href="img/after-slate-assurance--01-host-landing.png">open full page PNG</a> · guardrail fired (2)</div></figure></div></div><div class="skeleton-block"><h3>02 · SaaS marketing<span>nav · split hero · prose + panel · 3 price tiers · quote · FAQ · close · footer</span></h3><div class="shotgrid"><figure class="shot" style="margin:0"><div class="cap"><b>before</b><span>Skeleton, untouched</span></div><div class="frame"><img src="img/before-02-saas-marketing.png" alt="before on 02-saas-marketing" loading="lazy"></div><div class="open"><a href="img/before-02-saas-marketing.png">open full page PNG</a></div></figure><figure class="shot" style="margin:0"><div class="cap"><b>Northwind Outfitters</b><span>5.19:1 worst · 50 slots</span></div><div class="frame"><img src="img/after-northwind-outfitters--02-saas-marketing.png" alt="Northwind Outfitters on 02-saas-marketing" loading="lazy"></div><div class="open"><a href="img/after-northwind-outfitters--02-saas-marketing.png">open full page PNG</a></div></figure><figure class="shot" style="margin:0"><div class="cap"><b>Slate Assurance</b><span>4.71:1 worst · 50 slots</span></div><div class="frame"><img src="img/after-slate-assurance--02-saas-marketing.png" alt="Slate Assurance on 02-saas-marketing" loading="lazy"></div><div class="open"><a href="img/after-slate-assurance--02-saas-marketing.png">open full page PNG</a> · guardrail fired (2)</div></figure></div></div><div class="skeleton-block"><h3>03 · Product security<span>nav · centred hero · 4 stats · 3 pillars · 6 checks · FAQ · close · footer</span></h3><div class="shotgrid"><figure class="shot" style="margin:0"><div class="cap"><b>before</b><span>Skeleton, untouched</span></div><div class="frame"><img src="img/before-03-product-security.png" alt="before on 03-product-security" loading="lazy"></div><div class="open"><a href="img/before-03-product-security.png">open full page PNG</a></div></figure><figure class="shot" style="margin:0"><div class="cap"><b>Northwind Outfitters</b><span>5.19:1 worst · 55 slots</span></div><div class="frame"><img src="img/after-northwind-outfitters--03-product-security.png" alt="Northwind Outfitters on 03-product-security" loading="lazy"></div><div class="open"><a href="img/after-northwind-outfitters--03-product-security.png">open full page PNG</a></div></figure><figure class="shot" style="margin:0"><div class="cap"><b>Slate Assurance</b><span>4.71:1 worst · 55 slots</span></div><div class="frame"><img src="img/after-slate-assurance--03-product-security.png" alt="Slate Assurance on 03-product-security" loading="lazy"></div><div class="open"><a href="img/after-slate-assurance--03-product-security.png">open full page PNG</a> · guardrail fired (2)</div></figure></div></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>The kits themselves</h2>
+    <p class="sub">Colour tokens straight out of each kit's <code>kit.json</code>, with provenance:
+    <em>measured</em> means the source page declared it, <em>derived</em> means the kit builder had
+    to compute it (a sibling surface, a raised elevation, or the contrast repair above).</p>
+    <h3 style="margin-top:26px">Northwind Outfitters<span style="color:var(--ink-2);font-weight:400;font-size:.84rem"> · 4px CTA radius · Iowan Old Style / Segoe UI</span></h3><div class="swatches"><div class="swatch"><div class="chip" style="background:#c2703a"></div><div class="meta"><b>--accent</b>#c2703a<br>measured</div></div><div class="swatch"><div class="chip" style="background:#ddd3c2"></div><div class="meta"><b>--border</b>#ddd3c2<br>measured</div></div><div class="swatch"><div class="chip" style="background:#14251f"></div><div class="meta"><b>--ink</b>#14251f<br>measured</div></div><div class="swatch"><div class="chip" style="background:#6b6157"></div><div class="meta"><b>--ink-muted</b>#6b6157<br>measured</div></div><div class="swatch"><div class="chip" style="background:#f3ede2"></div><div class="meta"><b>--paper</b>#f3ede2<br>measured</div></div><div class="swatch"><div class="chip" style="background:#ffffff"></div><div class="meta"><b>--paper-alt</b>#ffffff<br>measured</div></div><div class="swatch"><div class="chip" style="background:#0f2e24"></div><div class="meta"><b>--primary</b>#0f2e24<br>measured</div></div><div class="swatch"><div class="chip" style="background:#ffffff"></div><div class="meta"><b>--primary-ink</b>#ffffff<br>measured</div></div></div><h3 style="margin-top:26px">Pulse Analytics<span style="color:var(--ink-2);font-weight:400;font-size:.84rem"> · 4px CTA radius · Avenir Next / Inter</span></h3><div class="swatches"><div class="swatch"><div class="chip" style="background:#12c2e9"></div><div class="meta"><b>--accent</b>#12c2e9<br>measured</div></div><div class="swatch"><div class="chip" style="background:#e3e6f0"></div><div class="meta"><b>--border</b>#e3e6f0<br>measured</div></div><div class="swatch"><div class="chip" style="background:#0d1021"></div><div class="meta"><b>--ink</b>#0d1021<br>measured</div></div><div class="swatch"><div class="chip" style="background:#5a6178"></div><div class="meta"><b>--ink-muted</b>#5a6178<br>measured</div></div><div class="swatch"><div class="chip" style="background:#ffffff"></div><div class="meta"><b>--paper</b>#ffffff<br>measured</div></div><div class="swatch"><div class="chip" style="background:#f5f7ff"></div><div class="meta"><b>--paper-alt</b>#f5f7ff<br>measured</div></div><div class="swatch"><div class="chip" style="background:#3d2cff"></div><div class="meta"><b>--primary</b>#3d2cff<br>measured</div></div><div class="swatch"><div class="chip" style="background:#ffffff"></div><div class="meta"><b>--primary-ink</b>#ffffff<br>measured</div></div></div><h3 style="margin-top:26px">Slate Assurance<span style="color:var(--ink-2);font-weight:400;font-size:.84rem"> · 2px CTA radius · Charter / Helvetica Neue</span></h3><div class="swatches"><div class="swatch"><div class="chip" style="background:#ffd400"></div><div class="meta"><b>--accent</b>#ffd400<br>derived</div></div><div class="swatch"><div class="chip" style="background:#d9d9d9"></div><div class="meta"><b>--border</b>#d9d9d9<br>measured</div></div><div class="swatch"><div class="chip" style="background:#111111"></div><div class="meta"><b>--ink</b>#111111<br>measured</div></div><div class="swatch"><div class="chip" style="background:#6a6a6a"></div><div class="meta"><b>--ink-muted</b>#6a6a6a<br>derived</div></div><div class="swatch"><div class="chip" style="background:#ffffff"></div><div class="meta"><b>--paper</b>#ffffff<br>measured</div></div><div class="swatch"><div class="chip" style="background:#f2f2f2"></div><div class="meta"><b>--paper-alt</b>#f2f2f2<br>measured</div></div><div class="swatch"><div class="chip" style="background:#806a00"></div><div class="meta"><b>--primary</b>#806a00<br>derived</div></div><div class="swatch"><div class="chip" style="background:#ffffff"></div><div class="meta"><b>--primary-ink</b>#ffffff<br>measured</div></div></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>The case that fails naively, and the guardrail that catches it</h2>
+    <p class="sub">Slate Assurance is greyscale with a single accent colour, declared as a
+    <em>text</em> colour on white. The measured brand colour is
+    <code>#ffd400</code>, which sits at <b>1.28:1</b>
+    on the page surface. A pipeline that copies the brand colour into the link colour ships
+    unreadable text; this one keeps the measured colour where colour is decoration and derives a
+    legible primary for anything that carries words.</p>
+    <div class="callout">
+      <h3>Guardrail · primary</h3>
+      <p><b>#ffd400</b> → <b>#806a00</b> (darken 0.50 towards black,
+      1.28:1 → 4.71:1 on the worst surface).
+      The measured colour survives as <code>--accent</code>, which is used for
+      surfaces, rules and underlines but never for text.</p>
+      <p style="margin:0">Every kit in this gallery is gated on that rule: if an enforced pair
+      cannot reach 4.5:1, <code>assemble_kit()</code> raises instead of writing a kit.</p>
+    </div>
+  </div>
+</section>
+<section>
+  <div class="wrap">
+    <h2>Reproduce all of it</h2>
+    <p class="sub">Standard library only. The three example brand sources are fictional pages
+    authored for this repository, so the whole thing runs offline and license-clean.</p>
+<pre><span class="c"># the gate: 3 sources x 4 skeletons, thresholds enforced</span>
+make eval          <span class="c"># writes docs/eval.json, fails on regression</span>
+
+<span class="c"># the gallery you are reading (needs a headless Chrome)</span>
+make gallery       <span class="c"># restyles pages, screenshots them, rebuilds this file</span>
+
+<span class="c"># one brand, by hand</span>
+make kit SOURCE=slate-assurance SKELETON=02-saas-marketing
+open out/restyled/slate-assurance--02-saas-marketing.html
+
+<span class="c"># what is in the registry</span>
+make api</pre>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p><b>brandkit-lab</b> — authored by <b>Shuo Zhao</b>. Zero third-party runtime dependencies;
+    the only optional network call in the whole repository is the documented
+    <code>--drafter openai:&lt;model&gt;</code> seam, which is inert unless you ask for it.</p>
+    <p>Every number on this page is written by a script in this repository from artefacts produced
+    by the pipeline. Nothing is typed by hand.</p>
+  </div>
+</footer>
+
+</body>
+</html>
