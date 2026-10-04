@@ -1,0 +1,102 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint-and-test:
+    name: lint + test (python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      # The library needs nothing installed. pytest is the only test-only
+      # dependency in the repository.
+      - name: Install test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pytest ruff
+
+      - name: Offline lint (no third-party imports, no remote assets, no secrets)
+        run: python scripts/check_lint.py
+
+      - name: Ruff
+        run: ruff check .
+
+      - name: Test suite
+        run: python -m pytest tests -q
+
+      - name: Smoke test every CLI entry point
+        run: |
+          python -m brandkit.blocks --json > /dev/null
+          python -m brandkit.skeletons
+          python -m brandkit.measure --source sources/northwind-outfitters.html --out /tmp/metrics.json
+          python -m brandkit.assemble_kit --metrics /tmp/metrics.json --skeleton 01-host-landing --out /tmp/kits
+          python -m brandkit.apply --kit /tmp/kits/northwind-outfitters--01-host-landing.kit.json --out /tmp/restyled.html
+          test -s /tmp/restyled.html
+          python -m brandkit.drafter --metrics /tmp/metrics.json --skeleton 01-host-landing --out /tmp/draft.json
+
+      - name: Upload the generated kit
+        if: matrix.python-version == '3.12'
+        uses: actions/upload-artifact@v4
+        with:
+          name: example-kit
+          path: /tmp/kits/
+          if-no-files-found: error
+
+  eval:
+    name: eval gates (python 3.12)
+    runs-on: ubuntu-latest
+    needs: lint-and-test
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # The harness exits non-zero if token coverage, WCAG AA, the
+      # tree-unchanged proof or determinism regress.
+      - name: Run the evaluation gates
+        run: python scripts/eval_report.py --keep
+
+      - name: The committed numbers must match a fresh run
+        run: |
+          python - <<'PY'
+          import json, pathlib, sys
+          fresh = json.loads(pathlib.Path("docs/eval.json").read_text())
+          if not fresh["passed"]:
+              sys.exit("eval gates failed: " + "; ".join(fresh["failures"]))
+          rows = fresh["rows"]
+          print(f"eval: {len(rows)} kits, tree_unchanged="
+                f"{fresh['summary']['tree_unchanged_rate']}, "
+                f"worst contrast {fresh['summary']['contrast_min']}:1")
+          PY
+          if ! git diff --quiet -- docs/eval.json; then
+            echo "docs/eval.json is stale: run 'make eval' and commit the result" >&2
+            git --no-pager diff --stat -- docs/eval.json >&2
+            exit 1
+          fi
+
+      - name: The gallery must point at files that exist
+        run: python scripts/build_gallery.py --verify
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eval-report
+          path: docs/eval.json
+          if-no-files-found: error
