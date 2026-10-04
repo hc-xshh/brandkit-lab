@@ -8,7 +8,7 @@ kit, renders `DESIGN.md` from that same kit, and then binds the kit onto neutral
 repeat count moved.
 
 No dependencies. `python3` and a browser for screenshots; nothing else.
-204 tests, an eval harness that fails on regression, CI on Python 3.10/3.11/3.12, and the gallery
+205 tests, an eval harness that fails on regression, CI on Python 3.10/3.11/3.12, and the gallery
 below is generated, not hand-maintained.
 
 ```
@@ -90,7 +90,7 @@ enforced contrast pair cleared WCAG AA, and 88.9% of token values came straight 
 page** — the rest were derived siblings (a second surface, a raised elevation, a repaired
 contrast).
 
-`pytest` — `204 passed in 9.89s`.
+`pytest` — `205 passed in 9.87s`.
 
 ---
 
@@ -159,7 +159,7 @@ is what makes the whole thing license-clean and runnable offline.
 ```bash
 make help                  # what exists
 make lint                  # offline lint: no third-party imports, no remote assets, no secrets
-make test                  # 204 tests (pytest is the only test-only dependency)
+make test                  # 205 tests (pytest is the only test-only dependency)
 make eval                  # the table above; writes docs/eval.json, exits 1 on regression
 make gallery               # re-render pages in headless Chrome + rebuild docs/index.html
 ```
@@ -267,7 +267,7 @@ brandkit/            tokens.py (the frozen contract)  measure.py  drafter.py
                      apply.py (the only binder)  util.py  htmltree.py
 skeletons/           4 neutral landing pages + TREE.md each
 sources/             3 fictional brand pages + README
-tests/               204 tests
+tests/               205 tests
 scripts/             eval_report.py  check_lint.py  shoot.py (CDP screenshots)  build_gallery.py
 docs/                index.html (the gallery)  eval.json  img/*.png
 ```
