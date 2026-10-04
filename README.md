@@ -53,18 +53,18 @@ copy of the skeleton. This is the tail of the actual run on Python 3.11:
 ```
 source                 skeleton                   tok   req  slot    AA    min  tree  det guard             hash
 ----------------------------------------------------------------------------------------------------------------
-northwind-outfitters   01-host-landing           1.00  1.00  0.84  1.00   5.19   yes  yes     0 a4d53894783bdbe3
-northwind-outfitters   02-saas-marketing         1.00  1.00  0.88  1.00   5.19   yes  yes     0 6c577c388b752d32
-northwind-outfitters   03-product-security       1.00  1.00  0.89  1.00   5.19   yes  yes     0 988d3f87c17da547
-northwind-outfitters   04-insurance-longform     1.00  1.00  0.86  1.00   5.19   yes  yes     0 76285c1b141fde68
-pulse-analytics        01-host-landing           1.00  1.00  0.84  1.00   5.75   yes  yes     0 da539de7a31355a2
-pulse-analytics        02-saas-marketing         1.00  1.00  0.88  1.00   5.75   yes  yes     0 df9908cd1463a443
-pulse-analytics        03-product-security       1.00  1.00  0.89  1.00   5.75   yes  yes     0 95075f01f07db3b8
-pulse-analytics        04-insurance-longform     1.00  1.00  0.86  1.00   5.75   yes  yes     0 ed06b97b255383f6
-slate-assurance        01-host-landing           1.00  1.00  0.84  1.00   4.71   yes  yes     2 a2b54807daec725e
-slate-assurance        02-saas-marketing         1.00  1.00  0.88  1.00   4.71   yes  yes     2 1e6538956255b65c
-slate-assurance        03-product-security       1.00  1.00  0.89  1.00   4.71   yes  yes     2 52ab138e6865a20c
-slate-assurance        04-insurance-longform     1.00  1.00  0.86  1.00   4.71   yes  yes     2 2eb3778a778ed8df
+northwind-outfitters   01-host-landing           1.00  1.00  0.84  1.00   5.19   yes  yes     0 d0cc1fb14dbcb588
+northwind-outfitters   02-saas-marketing         1.00  1.00  0.88  1.00   5.19   yes  yes     0 7fa5ca9a11f73e2f
+northwind-outfitters   03-product-security       1.00  1.00  0.89  1.00   5.19   yes  yes     0 33d619f60a1cd309
+northwind-outfitters   04-insurance-longform     1.00  1.00  0.86  1.00   5.19   yes  yes     0 6218d173f01869ac
+pulse-analytics        01-host-landing           1.00  1.00  0.84  1.00   5.75   yes  yes     0 d748f6fe91a99ef9
+pulse-analytics        02-saas-marketing         1.00  1.00  0.88  1.00   5.75   yes  yes     0 1e7eb0322728f617
+pulse-analytics        03-product-security       1.00  1.00  0.89  1.00   5.75   yes  yes     0 d0ee09c3cc213ddc
+pulse-analytics        04-insurance-longform     1.00  1.00  0.86  1.00   5.75   yes  yes     0 ca4d41372e857594
+slate-assurance        01-host-landing           1.00  1.00  0.84  1.00   4.71   yes  yes     2 c46fc414e949db1d
+slate-assurance        02-saas-marketing         1.00  1.00  0.88  1.00   4.71   yes  yes     2 17fb22484e6a1f36
+slate-assurance        03-product-security       1.00  1.00  0.89  1.00   4.71   yes  yes     2 38118edbcff4034f
+slate-assurance        04-insurance-longform     1.00  1.00  0.86  1.00   4.71   yes  yes     2 64507fd11b38dafa
 
 kits evaluated            12 (3 sources x 4 skeletons)
 token coverage            1.0000  (floor 1.0)
