@@ -109,3 +109,24 @@ def test_measuring_a_url_is_opt_in_only():
     with pytest.raises(SystemExit):
         module.main(["--source", "sources/x.html", "--source-url", "https://example.com",
                      "--out", "/dev/null"])  # both at once is an error too
+
+
+def test_a_font_shorthand_does_not_leak_its_size_into_the_family():
+    """`font: 700 32px/1.2 "Iowan Old Style", serif` names one family.
+
+    Splitting the shorthand on commas alone yields `32px/1.2 "Iowan Old Style"`,
+    which would become a font token. A page measured from a real URL hits this
+    on the very first declaration it owns.
+    """
+    html = """<html><head><style>
+      body { font: 16px/1.6 system-ui, sans-serif; }
+      h1 { font: italic small-caps 700 32px/1.2 "Iowan Old Style", Georgia, serif; }
+      code { font-family: "B612 Mono", monospace; }
+      p { font: 1rem serif; }
+    </style></head><body><h1>Heading</h1><p>Body</p></body></html>"""
+    metrics = measure.measure_html(html, "shorthand", "test", "inline")
+    assert metrics["fonts"]["roles"]["heading-font"] == "Iowan Old Style"
+    assert metrics["fonts"]["roles"]["body-font"] == "system-ui"
+    assert "B612 Mono" in metrics["fonts"]["families"], "a digit in a real name is not a size"
+    leaked = [f for f in metrics["fonts"]["families"] if "px" in f or "/" in f or "rem" in f]
+    assert not leaked, f"shorthand leftovers in the font families: {leaked}"

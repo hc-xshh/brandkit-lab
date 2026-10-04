@@ -118,9 +118,36 @@ def split_font_stack(value: str) -> list[str]:
     return [f.strip().strip("'\"") for f in split_top_level(value) if f.strip()]
 
 
-# --------------------------------------------------------------------------
-# palette
-# --------------------------------------------------------------------------
+#: One token of a `font` shorthand that is *not* a family: a size with a unit,
+#: a line-height, a weight or a style keyword.
+SHORTHAND_SIZE_RE = re.compile(
+    r"^[\d.]+(?:px|rem|em|pt|%|vw|vh|ch|ex)?(?:\s*/\s*[\d.]+\S*)?$"
+    r"|^(?:italic|oblique|small-caps|bold|bolder|lighter|normal)$"
+)
+
+
+def families_from_shorthand(value: str) -> list[str]:
+    """Families from a ``font`` shorthand, skipping size, weight and line-height.
+
+    `font: 700 32px/1.2 "Iowan Old Style", Georgia, serif` names one family in
+    its first segment, and it is the part after the size. Splitting the segment
+    on commas alone would hand the kit `32px/1.2 "Iowan Old Style"` as a font
+    family and ship a nonsense token.
+
+    The family is whatever follows the *last* shorthand token, so a family whose
+    name happens to contain digits ("B612 Mono") survives: only tokens that look
+    like a size, a weight, a style or a line-height are skipped.
+    """
+    first, *rest = split_top_level(value)
+    tokens = first.split()
+    start = 0
+    for index, token in enumerate(tokens):
+        if SHORTHAND_SIZE_RE.match(token):
+            start = index + 1
+    first = " ".join(tokens[start:])
+    return [f.strip().strip("'\"") for f in (first, *rest) if f.strip()]
+
+
 def measure_palette(decls: list[tuple[str, str, str]]) -> dict:
     background = Counter()
     foreground = Counter()
@@ -274,7 +301,10 @@ def measure_fonts(decls: list[tuple[str, str, str]]) -> dict:
     for selector, prop, value in decls:
         if prop not in ("font-family", "font"):
             continue
-        families = [f for f in split_font_stack(value) if f]
+        # `font` is a shorthand and mixes size, weight and line-height into the
+        # value; `font-family` is not. Only the shorthand needs the extra pass.
+        splitter = families_from_shorthand if prop == "font" else split_font_stack
+        families = [f for f in splitter(value) if f]
         if not families:
             continue
         all_families.update(families)

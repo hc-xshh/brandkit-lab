@@ -9,10 +9,19 @@ from pathlib import Path
 
 HEX_RE = re.compile(r"#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{4}|[0-9a-fA-F]{3})\b")
 FUNC_COLOR_RE = re.compile(r"rgba?\(([^)]*)\)")
+#: Families that carry no intent: a stack made only of these tells you nothing
+#: about the brand, so the measurement falls back instead of naming a font.
 GENERIC_FAMILIES = {
     "serif", "sans-serif", "monospace", "cursive", "fantasy",
-    "system-ui", "ui-serif", "ui-sans-serif", "ui-monospace", "ui-rounded",
     "math", "emoji", "fangsong", "inherit", "initial", "unset", "revert",
+}
+
+#: The `ui-*` families and `system-ui` are explicit, modern choices -- a page
+#: that asks for the platform's UI face has made a decision worth recording, and
+#: it is the same one the neutral skeletons make. Kept separate from the
+#: no-intent set above so that distinction stays visible in the code.
+SYSTEM_UI_FAMILIES = {
+    "system-ui", "ui-serif", "ui-sans-serif", "ui-monospace", "ui-rounded",
 }
 
 
