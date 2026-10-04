@@ -8,11 +8,12 @@ iteration-order dependency has to fail loudly.
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 import pytest
 
 from brandkit import drafter, measure, skeletons, util
-from brandkit.assemble_kit import assemble_kit, write_kit
+from brandkit.assemble_kit import assemble_kit, render_css, write_kit
 
 PAIRS = [
     (source, skeleton)
@@ -71,3 +72,30 @@ def test_repeated_runs_keep_the_kit_fingerprint(metrics_all):
         kit = assemble_kit(drafter.draft(skeleton, metrics), metrics)
         fingerprints.add(kit["fingerprints"]["tokens"])
     assert len(fingerprints) == 1
+
+def test_a_kit_fingerprint_does_not_depend_on_the_checkout_path(tmp_path, monkeypatch):
+    """Same brand, different working directory: the same kit.
+
+    The fingerprint is over facts. A path that leaks into `metrics.json` would
+    make the same brand hash differently in CI than on a laptop, which would
+    quietly turn every downstream "the two models agree" check into a
+    comparison of directory names.
+    """
+    repo = Path(__file__).resolve().parent.parent
+    source = repo / "sources" / "northwind-outfitters.html"
+    skeleton = skeletons.load("01-host-landing")
+
+    monkeypatch.chdir(repo)
+    here = measure.measure_source(source.relative_to(repo))
+    monkeypatch.chdir(tmp_path)
+    elsewhere = measure.measure_source(source)
+
+    assert here["source"]["reference"] == "sources/northwind-outfitters.html"
+    assert "/" not in elsewhere["source"]["reference"].lstrip("/") or \
+        elsewhere["source"]["reference"] == str(source)
+    assert here["source"]["sha256"] == elsewhere["source"]["sha256"]
+
+    kit_a = assemble_kit(drafter.draft(skeleton, here), here)
+    kit_b = assemble_kit(drafter.draft(skeleton, elsewhere), elsewhere)
+    assert kit_a["fingerprints"]["tokens"] == kit_b["fingerprints"]["tokens"]
+    assert render_css(kit_a) == render_css(kit_b)

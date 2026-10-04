@@ -489,10 +489,21 @@ def fetch(url: str, timeout: int = DEFAULT_TIMEOUT) -> str:
 
 
 def measure_source(path: str | Path) -> dict:
-    """Measure a local HTML file; convenience wrapper for tests and eval."""
+    """Measure a local HTML file; convenience wrapper for tests and eval.
+
+    The recorded ``reference`` is made relative to the working directory when
+    that is possible: a kit's fingerprint must describe the brand, not the
+    directory somebody happened to check the repository out into.
+    """
     p = Path(path)
     html = p.read_text(encoding="utf-8")
-    return measure_html(html, slugify(p.stem), "file", str(p))
+    reference = str(p)
+    if p.is_absolute():
+        try:
+            reference = str(p.relative_to(Path.cwd()))
+        except ValueError:
+            reference = str(p)
+    return measure_html(html, slugify(p.stem), "file", reference)
 
 
 def main(argv: list[str] | None = None) -> int:

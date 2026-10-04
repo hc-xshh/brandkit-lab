@@ -55,8 +55,12 @@ def discover(repo_root: Path) -> tuple[list[str], list[str]]:
     return sources, skeletons_found
 
 
-def evaluate_pair(source_path: Path, skeleton_id: str, workdir: Path) -> dict:
-    metrics = measure.measure_source(source_path)
+def evaluate_pair(
+    source_path: Path, skeleton_id: str, workdir: Path, repo_root: Path
+) -> dict:
+    # A repo-relative reference keeps a kit's fingerprint independent of where
+    # the repository is checked out (CI, a copy, a container).
+    metrics = measure.measure_source(source_path.relative_to(repo_root))
     skeleton = skeletons.load(skeleton_id)
     source_id = metrics["source"]["id"]
 
@@ -231,7 +235,7 @@ def main(argv: list[str] | None = None) -> int:
     for source_id in source_ids:
         for skeleton_id in skeleton_ids:
             rows.append(evaluate_pair(repo_root / "sources" / f"{source_id}.html",
-                                      skeleton_id, workdir))
+                                      skeleton_id, workdir, repo_root))
 
     summary = summarise(rows)
     failures = check_thresholds(summary, rows)
@@ -265,7 +269,6 @@ def main(argv: list[str] | None = None) -> int:
 
     report = {
         "schema": "brandkit/eval@1",
-        "repo": str(repo_root.name),
         "workdir": str(workdir.relative_to(repo_root)) if workdir.is_relative_to(repo_root)
         else str(workdir),
         "sources": source_ids,
