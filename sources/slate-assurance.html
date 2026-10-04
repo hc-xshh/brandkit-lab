@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Slate Assurance — brand source</title>
+<!--
+  brandkit example source — FICTIONAL BRAND, authored for this repository.
+
+  This is the deliberately awkward case. The brand is entirely greyscale with a
+  single accent (#ffd400) that is declared as a *text* colour on white. A naive
+  "use the brand colour for links and buttons" pipeline ships text at a 1.28:1
+  contrast ratio. See brandkit/assemble_kit.py -> apply_contrast_guardrail.
+-->
+<style>
+  html { font-family: "Helvetica Neue", Arial, "Segoe UI", sans-serif; background: #ffffff; color: #111111; }
+  body { margin: 0; padding: 0 24px 96px; background: #ffffff; }
+  h1, h2, h3 { font-family: "Charter", "Iowan Old Style", Georgia, serif; color: #111111; }
+  h1 { font-size: 46px; line-height: 1.12; margin: 0 0 16px; }
+  h2 { font-size: 30px; line-height: 1.22; margin: 0 0 12px; }
+  p { margin: 0 0 16px; }
+  .lead { font-size: 19px; color: #767676; }
+  .band { background: #f2f2f2; border-radius: 4px; padding: 40px 32px; margin: 0 0 40px; }
+  .card {
+    background: #ffffff;
+    border: 1px solid #e6e6e6;
+    border-radius: 4px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 2px rgba(17, 17, 17, 0.06), 0 8px 20px rgba(17, 17, 17, 0.06);
+  }
+  .eyebrow { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #767676; }
+  a, .cta { color: #ffd400; text-decoration: none; border-radius: 2px; }
+  .cta { background: #111111; color: #ffd400; padding: 14px 24px; border-radius: 2px; }
+  .highlight { background: #ffd400; color: #111111; border-radius: 2px; padding: 4px 8px; }
+  .meta { font-size: 13px; color: #767676; }
+  table { border-collapse: collapse; }
+  td, th { border: 1px solid #d9d9d9; padding: 12px 16px; text-align: left; }
+  footer { border-top: 1px solid #d9d9d9; padding: 32px 0; color: #767676; }
+</style>
+</head>
+<body>
+
+<section>
+  <p class="eyebrow">Life cover</p>
+  <h1>Term life cover, priced in writing, in under four minutes</h1>
+  <p class="lead">A fixed monthly premium, a fixed term and a benefit that does not shrink when you claim. No investment component, no surrender charge, no early-exit penalty.</p>
+  <a class="cta" href="#">Get an indicative price</a>
+  <a href="#">Download the key information document</a>
+  <p class="meta">Indicative prices only. Underwriting happens after the application.</p>
+</section>
+
+<section class="band">
+  <p class="eyebrow">What is covered</p>
+  <h2>Cover that pays out once, and pays in full</h2>
+  <p>The policy pays the sum insured if the life insured dies within the selected term. There is no investment account attached to this contract and therefore no account value to surrender.</p>
+  <div class="card">
+    <h3>Death benefit</h3>
+    <p>Paid to the nominated beneficiaries within ten working days of a complete claim file. The sum insured is fixed at the start of the contract and is not reduced by the insurer's own costs.</p>
+  </div>
+  <div class="card">
+    <h3>Terminal illness advance</h3>
+    <p>Where a treating physician certifies a life expectancy of twelve months or less, the benefit may be advanced before death, at no additional premium.</p>
+  </div>
+  <h2>What is not covered</h2>
+  <p class="lead">We would rather lose the sale than surprise a family at the worst possible moment.</p>
+  <p>Claims arising in the first twenty-four months where the application omitted a material fact are limited to a refund of premiums. Suicide within twenty-four months is excluded, as required by the jurisdiction in which the policy is issued.</p>
+  <p class="meta">Full exclusions are set out in the policy conditions and the key information document.</p>
+</section>
+
+<section>
+  <p class="eyebrow">Premiums and taxes</p>
+  <h2>What you pay, and what we are obliged to withhold</h2>
+  <p>Premiums are level for the term of the contract. Premium tax, where applicable, is included in the quoted figure. We do not apply a policy fee, an issue fee or a broker charge beyond the disclosed commission.</p>
+  <h2>If you change your mind</h2>
+  <p>You have thirty days from the start date to cancel and receive a full refund of premiums paid, provided no claim has been made. After that, the policy may be cancelled at any time and cover ends when premiums stop.</p>
+  <p class="highlight">Cooling-off period: 30 days, full refund.</p>
+  <h2>How we handle your data</h2>
+  <p>Personal data is processed under the general data protection regulation, stored inside the European economic area, and retained for the statutory period after the contract ends. Medical evidence is used only for underwriting and claim assessment.</p>
+  <a href="#">Read the data processing notice</a>
+  <p class="meta">Last updated at the start of the current financial year.</p>
+</section>
+
+<footer>
+  <p>Slate Assurance — a fictional brand authored for the brandkit-lab examples.</p>
+  <p class="meta">Slate Assurance S.A., 12 rue de la Régence, Brussels. Registration pending. This page is not a financial promotion.</p>
+  <p class="meta">Regulated activity. Complaints within six months. Solvency and capital information available on request.</p>
+</footer>
+
+</body>
+</html>
